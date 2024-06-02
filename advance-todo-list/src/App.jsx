@@ -3,6 +3,7 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { MdOutlineRadioButtonUnchecked } from "react-icons/md";
 import {  useState } from "react";
+import { IoSearchCircleSharp } from "react-icons/io5";
 const todos = [
   {
     id: 1,
@@ -65,8 +66,12 @@ const todos = [
 const App = () => {
   const [input , setInput ] = useState("");
   const [todoArray , setTodoArray ] = useState(todos);
- 
+ const [searchTodo , setSearchTodo] = useState("")
   
+ const searchedTodos = todoArray.filter((todoItem) =>
+  todoItem.title.toLowerCase().includes(searchTodo.toLowerCase())
+ 
+);
 
   
   const addTodo = () => {
@@ -92,6 +97,8 @@ const App = () => {
   const deleteTodo = (id) => {
     setTodoArray((todo) => todo.filter((todo) => todo.id !== id))
   };
+
+
   
   return (
     <main className="w-full flex  min-h-screen bg-gradient-to-r from-cyan-500 to-blue-500">
@@ -111,10 +118,16 @@ const App = () => {
              onClick={addTodo}
             />
           </div>
+          <div className="flex items-center gap-2  my-4 justify-center ">
+
+          <input type="search" className="bg-slate-200 w-[80%] shadow-lg  rounded-md py-3 text-slate-950 px-4" value={searchTodo} placeholder="search todos here.." onChange={(e) => setSearchTodo(e.target.value)} />
+          <IoSearchCircleSharp className="text-5xl  text-indigo-500"/>
+
         </div>
+          </div>
 
         <ul className=" py-4 flex flex-col px-6  gap-4 shadow-xl">
-          {todoArray.map((todo) => (
+          {searchedTodos.map((todo) => (
             <li className="flex items-center py-3 shadow-sm bg-slate-50  " key={todo.id}>
                {
                 todo.completed ? <IoIosCheckmarkCircleOutline className="text-2xl text-green-600 w-[10%] "  onClick={() => toggleCompleteTodo(todo.id)}/> : <MdOutlineRadioButtonUnchecked  className="text-xl w-[10%] "  onClick={() => toggleCompleteTodo(todo.id)}/>
